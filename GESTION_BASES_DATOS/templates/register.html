@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Crear Usuario · Novaventa{% endblock %}
+{% block page_title %}Crear Usuario{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:500px">
+    <div class="card-title">Nuevo Usuario</div>
+    <form method="POST">
+        <div class="form-group">
+            <label>Nombre completo</label>
+            <input type="text" name="nombre" required placeholder="Ej: Carlos López">
+        </div>
+        <div class="form-group">
+            <label>Correo electrónico</label>
+            <input type="email" name="correo" required placeholder="correo@novaventa.com">
+        </div>
+        <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" name="password" required placeholder="••••••••">
+        </div>
+        <div class="form-group">
+            <label>Rol</label>
+            <select name="rol" required>
+                <option value="">— Seleccionar —</option>
+                <option value="ADMIN">Administrador</option>
+                <option value="OPERARIO">Operario de Ruta</option>
+                <option value="ANALISTA">Analista de Inventario</option>
+            </select>
+        </div>
+        <div class="flex gap-2">
+            <button type="submit" class="btn btn-primary">Crear Usuario</button>
+            <a href="{{ url_for('home') }}" class="btn btn-outline">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

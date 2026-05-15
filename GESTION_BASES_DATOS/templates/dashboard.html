@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard · Novaventa{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block topbar_actions %}
+<a href="{{ url_for('ventas.crear_venta') }}" class="btn btn-primary btn-sm">+ Registrar Venta</a>
+{% endblock %}
+
+{% block content %}
+<div class="grid-4 mb-6">
+    <div class="stat-card">
+        <div class="stat-icon">🏧</div>
+        <div class="stat-label">Máquinas activas</div>
+        <div class="stat-value">{{ total_maquinas }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">🍫</div>
+        <div class="stat-label">Snacks registrados</div>
+        <div class="stat-value">{{ total_snacks }}</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">💳</div>
+        <div class="stat-label">Total ventas</div>
+        <div class="stat-value">{{ total_ventas }}</div>
+    </div>
+    <div class="stat-card" style="border-color: {% if stock_bajo > 0 %}rgba(239,68,68,.4){% else %}var(--border){% endif %}">
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-label">Espirales stock bajo</div>
+        <div class="stat-value" style="color: {% if stock_bajo > 0 %}#ef4444{% else %}var(--text){% endif %}">{{ stock_bajo }}</div>
+        <div class="stat-sub">menos de 3 unidades</div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">Ventas recientes</div>
+    {% if ventas_recientes %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Espiral</th>
+                    <th>Snack</th>
+                    <th>Máquina</th>
+                    <th>Cantidad</th>
+                    <th>Total</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in ventas_recientes %}
+                <tr>
+                    <td><span style="color:var(--muted)">{{ v.id }}</span></td>
+                    <td>{{ v.espiral.codigo }}</td>
+                    <td>{{ v.espiral.snack.nombre if v.espiral.snack else '—' }}</td>
+                    <td>{{ v.espiral.maquina.nombre }}</td>
+                    <td>{{ v.cantidad }}</td>
+                    <td><strong>$ {{ "%.2f"|format(v.total) }}</strong></td>
+                    <td><span style="color:var(--muted)">{{ v.fecha.strftime('%d/%m/%Y %H:%M') }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p style="color:var(--muted); font-size:14px;">No hay ventas registradas aún.</p>
+    {% endif %}
+</div>
+{% endblock %}

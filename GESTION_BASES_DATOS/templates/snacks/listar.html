@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Snacks · Novaventa{% endblock %}
+{% block page_title %}Snacks{% endblock %}
+{% block topbar_actions %}
+<a href="{{ url_for('snacks.crear_snack') }}" class="btn btn-primary btn-sm">+ Nuevo Snack</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Marca</th>
+                    <th>Gramos</th>
+                    <th>Precio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in snacks %}
+                <tr>
+                    <td><span style="color:var(--muted)">{{ s.id }}</span></td>
+                    <td><strong>{{ s.nombre }}</strong></td>
+                    <td>{{ s.marca or '—' }}</td>
+                    <td>{{ s.gramos|string ~ 'g' if s.gramos else '—' }}</td>
+                    <td>$ {{ "%.2f"|format(s.precio) }}</td>
+                    <td>
+                        <div class="flex gap-2">
+                            <a href="{{ url_for('snacks.editar_snack', id=s.id) }}" class="btn btn-outline btn-sm">✏️ Editar</a>
+                            <a href="{{ url_for('snacks.eliminar_snack', id=s.id) }}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('¿Eliminar este snack?')">🗑️ Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" style="color:var(--muted); text-align:center; padding:32px">No hay snacks registrados.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

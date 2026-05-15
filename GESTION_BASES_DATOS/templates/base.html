@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Novaventa{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #13131a;
+            --surface2: #1c1c28;
+            --border: #2a2a3d;
+            --accent: #f97316;
+            --accent2: #fb923c;
+            --text: #e8e8f0;
+            --muted: #7c7c9a;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #eab308;
+            --info: #3b82f6;
+            --sidebar-w: 240px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: var(--sidebar-w);
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            top: 0; left: 0;
+            z-index: 100;
+        }
+        .sidebar-logo {
+            padding: 28px 24px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .sidebar-logo .brand {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 20px;
+            color: var(--accent);
+            letter-spacing: -0.5px;
+        }
+        .sidebar-logo .sub {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            overflow-y: auto;
+        }
+        .nav-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--muted);
+            padding: 12px 12px 6px;
+        }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all .15s;
+        }
+        .nav-link:hover, .nav-link.active {
+            background: var(--surface2);
+            color: var(--text);
+        }
+        .nav-link.active { color: var(--accent); }
+        .nav-link .icon { font-size: 16px; width: 20px; text-align: center; }
+        .sidebar-footer {
+            padding: 16px 12px;
+            border-top: 1px solid var(--border);
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--surface2);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        .user-avatar {
+            width: 32px; height: 32px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            color: white;
+        }
+        .user-name { font-size: 13px; font-weight: 500; }
+        .user-role { font-size: 11px; color: var(--muted); }
+
+        /* MAIN */
+        .main {
+            margin-left: var(--sidebar-w);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .topbar {
+            padding: 20px 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .page-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+        }
+        .content {
+            padding: 32px;
+            flex: 1;
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+        .card-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        /* TABLE */
+        .table-wrap { overflow-x: auto; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th {
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+            font-weight: 500;
+        }
+        td {
+            padding: 14px 14px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: var(--surface2); }
+
+        /* BADGES */
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+        .badge-success { background: rgba(34,197,94,.15); color: var(--success); }
+        .badge-danger  { background: rgba(239,68,68,.15);  color: var(--danger);  }
+        .badge-warning { background: rgba(234,179,8,.15);  color: var(--warning); }
+        .badge-info    { background: rgba(59,130,246,.15); color: var(--info);    }
+        .badge-muted   { background: var(--surface2);      color: var(--muted);   }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            border: none;
+            transition: all .15s;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--accent2); }
+        .btn-outline {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-outline:hover { background: var(--surface2); }
+        .btn-danger {
+            background: rgba(239,68,68,.15);
+            color: var(--danger);
+        }
+        .btn-danger:hover { background: rgba(239,68,68,.25); }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+        /* FORMS */
+        .form-group { margin-bottom: 18px; }
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            margin-bottom: 7px;
+        }
+        input, select, textarea {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color .15s;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent);
+        }
+        select option { background: var(--surface2); }
+
+        /* ALERTS */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .alert-success { background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.3); color: var(--success); }
+        .alert-danger  { background: rgba(239,68,68,.12);  border: 1px solid rgba(239,68,68,.3);  color: var(--danger);  }
+        .alert-warning { background: rgba(234,179,8,.12);  border: 1px solid rgba(234,179,8,.3);  color: var(--warning); }
+        .alert-info    { background: rgba(59,130,246,.12); border: 1px solid rgba(59,130,246,.3); color: var(--info);    }
+
+        /* UTILS */
+        .flex { display: flex; }
+        .gap-2 { gap: 8px; }
+        .gap-3 { gap: 12px; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .mb-4 { margin-bottom: 16px; }
+        .mb-6 { margin-bottom: 24px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+        /* STAT CARDS */
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+        .stat-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            margin: 6px 0 2px;
+            line-height: 1;
+        }
+        .stat-sub { font-size: 12px; color: var(--muted); }
+        .stat-icon { font-size: 28px; margin-bottom: 10px; }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .main { margin-left: 0; }
+            .grid-4 { grid-template-columns: 1fr 1fr; }
+            .content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div class="sidebar-logo">
+        <div class="brand">NOVAVENTA</div>
+        <div class="sub">Sistema de Gestión</div>
+    </div>
+    <nav class="sidebar-nav">
+        <div class="nav-label">Principal</div>
+        <a href="{{ url_for('home') }}" class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">
+            <span class="icon">📊</span> Dashboard
+        </a>
+
+        <div class="nav-label">Inventario</div>
+        <a href="{{ url_for('maquinas.listar_maquinas') }}" class="nav-link {% if 'maquinas' in request.endpoint %}active{% endif %}">
+            <span class="icon">🏧</span> Máquinas
+        </a>
+        <a href="{{ url_for('espirales.listar_espirales') }}" class="nav-link {% if 'espirales' in request.endpoint %}active{% endif %}">
+            <span class="icon">🌀</span> Espirales
+        </a>
+        <a href="{{ url_for('snacks.listar_snacks') }}" class="nav-link {% if 'snacks' in request.endpoint %}active{% endif %}">
+            <span class="icon">🍫</span> Snacks
+        </a>
+
+        <div class="nav-label">Operaciones</div>
+        <a href="{{ url_for('ventas.listar_ventas') }}" class="nav-link {% if 'ventas' in request.endpoint %}active{% endif %}">
+            <span class="icon">💳</span> Ventas
+        </a>
+
+        {% if current_user.rol == 'ADMIN' %}
+        <div class="nav-label">Administración</div>
+        <a href="{{ url_for('auth.register') }}" class="nav-link {% if request.endpoint == 'auth.register' %}active{% endif %}">
+            <span class="icon">👤</span> Crear Usuario
+        </a>
+        {% endif %}
+    </nav>
+    <div class="sidebar-footer">
+        {% if current_user.is_authenticated %}
+        <div class="user-info">
+            <div class="user-avatar">{{ current_user.nombre[0].upper() }}</div>
+            <div>
+                <div class="user-name">{{ current_user.nombre }}</div>
+                <div class="user-role">{{ current_user.rol }}</div>
+            </div>
+        </div>
+        {% endif %}
+        <a href="{{ url_for('auth.logout') }}" class="nav-link">
+            <span class="icon">🚪</span> Cerrar sesión
+        </a>
+    </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+    <div class="topbar">
+        <div class="page-title">{% block page_title %}{% endblock %}</div>
+        <div>{% block topbar_actions %}{% endblock %}</div>
+    </div>
+    <div class="content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+</main>
+
+</body>
+</html>

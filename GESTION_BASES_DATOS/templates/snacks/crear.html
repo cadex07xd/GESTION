@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Nuevo Snack · Novaventa{% endblock %}
+{% block page_title %}Nuevo Snack{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:500px">
+    <div class="card-title">Registrar Snack</div>
+    <form method="POST">
+        <div class="form-group">
+            <label>Nombre del snack</label>
+            <input type="text" name="nombre" required placeholder="Ej: Papas Pringles">
+        </div>
+        <div class="form-group">
+            <label>Marca</label>
+            <input type="text" name="marca" required placeholder="Ej: Pringles">
+        </div>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Precio de venta ($)</label>
+                <input type="number" name="precio" step="0.01" min="0" required placeholder="0.00">
+            </div>
+            <div class="form-group">
+                <label>Gramos (opcional)</label>
+                <input type="number" name="gramos" min="1" placeholder="Ej: 150">
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <button type="submit" class="btn btn-primary">Guardar Snack</button>
+            <a href="{{ url_for('snacks.listar_snacks') }}" class="btn btn-outline">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

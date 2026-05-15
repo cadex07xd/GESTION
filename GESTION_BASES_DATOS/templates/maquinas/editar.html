@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Editar Máquina · Novaventa{% endblock %}
+{% block page_title %}Editar Máquina{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:500px">
+    <div class="card-title">Editar: {{ maquina.nombre }}</div>
+    <form method="POST">
+        <div class="form-group">
+            <label>Nombre del punto</label>
+            <input type="text" name="nombre" required value="{{ maquina.nombre }}">
+        </div>
+        <div class="form-group">
+            <label>Ubicación / Dirección</label>
+            <input type="text" name="ubicacion" required value="{{ maquina.ubicacion }}">
+        </div>
+        <div class="form-group">
+            <label>Estado</label>
+            <select name="estado" required>
+                <option value="ACTIVA" {% if maquina.estado == 'ACTIVA' %}selected{% endif %}>Activa</option>
+                <option value="INACTIVA" {% if maquina.estado == 'INACTIVA' %}selected{% endif %}>Inactiva</option>
+                <option value="MANTENIMIENTO" {% if maquina.estado == 'MANTENIMIENTO' %}selected{% endif %}>En Mantenimiento</option>
+            </select>
+        </div>
+        <div class="flex gap-2">
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <a href="{{ url_for('maquinas.listar_maquinas') }}" class="btn btn-outline">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

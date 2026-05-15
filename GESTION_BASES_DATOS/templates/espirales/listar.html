@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Espirales · Novaventa{% endblock %}
+{% block page_title %}Espirales{% endblock %}
+{% block topbar_actions %}
+<a href="{{ url_for('espirales.crear_espiral') }}" class="btn btn-primary btn-sm">+ Nuevo Espiral</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Código</th>
+                    <th>Máquina</th>
+                    <th>Snack asignado</th>
+                    <th>Stock actual</th>
+                    <th>Capacidad máx.</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in espirales %}
+                <tr>
+                    <td><span style="color:var(--muted)">{{ e.id }}</span></td>
+                    <td>
+                        <span style="font-family:'Syne',sans-serif; font-weight:700; font-size:15px; color:var(--accent)">
+                            {{ e.codigo }}
+                        </span>
+                    </td>
+                    <td>{{ e.maquina.nombre }}</td>
+                    <td>{{ e.snack.nombre if e.snack else '—' }}</td>
+                    <td>
+                        {% if e.stock_actual == 0 %}
+                            <span class="badge badge-danger">Sin stock</span>
+                        {% elif e.stock_actual < 3 %}
+                            <span class="badge badge-warning">{{ e.stock_actual }} uds</span>
+                        {% else %}
+                            <span class="badge badge-success">{{ e.stock_actual }} uds</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ e.capacidad }}</td>
+                    <td>
+                        <a href="{{ url_for('espirales.eliminar_espiral', id=e.id) }}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('¿Eliminar este espiral?')">🗑️ Eliminar</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" style="color:var(--muted); text-align:center; padding:32px">No hay espirales registrados.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

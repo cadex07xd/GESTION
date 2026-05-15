@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Ventas · Novaventa{% endblock %}
+{% block page_title %}Ventas{% endblock %}
+{% block topbar_actions %}
+<a href="{{ url_for('ventas.crear_venta') }}" class="btn btn-primary btn-sm">+ Registrar Venta</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Espiral</th>
+                    <th>Snack</th>
+                    <th>Máquina</th>
+                    <th>Cantidad</th>
+                    <th>Total pagado</th>
+                    <th>Fecha y hora</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in ventas %}
+                <tr>
+                    <td><span style="color:var(--muted)">{{ v.id }}</span></td>
+                    <td>
+                        <span style="font-family:'Syne',sans-serif; font-weight:700; color:var(--accent)">
+                            {{ v.espiral.codigo }}
+                        </span>
+                    </td>
+                    <td>{{ v.espiral.snack.nombre if v.espiral.snack else '—' }}</td>
+                    <td><span style="color:var(--muted)">{{ v.espiral.maquina.nombre }}</span></td>
+                    <td>{{ v.cantidad }}</td>
+                    <td><strong>$ {{ "%.2f"|format(v.total) }}</strong></td>
+                    <td><span style="color:var(--muted)">{{ v.fecha.strftime('%d/%m/%Y %H:%M') }}</span></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" style="color:var(--muted); text-align:center; padding:32px">No hay ventas registradas.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Nueva Máquina · Novaventa{% endblock %}
+{% block page_title %}Nueva Máquina{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:500px">
+    <div class="card-title">Registrar Máquina Dispensadora</div>
+    <form method="POST">
+        <div class="form-group">
+            <label>Nombre del punto</label>
+            <input type="text" name="nombre" required placeholder="Ej: Centro Comercial Andino - Piso 2">
+        </div>
+        <div class="form-group">
+            <label>Ubicación / Dirección</label>
+            <input type="text" name="ubicacion" required placeholder="Ej: Cra 11 #82-71, Bogotá">
+        </div>
+        <div class="form-group">
+            <label>Estado</label>
+            <select name="estado" required>
+                <option value="">— Seleccionar —</option>
+                <option value="ACTIVA">Activa</option>
+                <option value="INACTIVA">Inactiva</option>
+                <option value="MANTENIMIENTO">En Mantenimiento</option>
+            </select>
+        </div>
+        <div class="flex gap-2">
+            <button type="submit" class="btn btn-primary">Guardar Máquina</button>
+            <a href="{{ url_for('maquinas.listar_maquinas') }}" class="btn btn-outline">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Máquinas · Novaventa{% endblock %}
+{% block page_title %}Máquinas Dispensadoras{% endblock %}
+{% block topbar_actions %}
+<a href="{{ url_for('maquinas.crear_maquina') }}" class="btn btn-primary btn-sm">+ Nueva Máquina</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nombre del punto</th>
+                    <th>Ubicación</th>
+                    <th>Estado</th>
+                    <th>Espirales</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in maquinas %}
+                <tr>
+                    <td><span style="color:var(--muted)">{{ m.id }}</span></td>
+                    <td><strong>{{ m.nombre }}</strong></td>
+                    <td><span style="color:var(--muted)">{{ m.ubicacion }}</span></td>
+                    <td>
+                        {% if m.estado == 'ACTIVA' %}
+                            <span class="badge badge-success">Activa</span>
+                        {% elif m.estado == 'INACTIVA' %}
+                            <span class="badge badge-danger">Inactiva</span>
+                        {% else %}
+                            <span class="badge badge-warning">{{ m.estado }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ m.espirales|length }}</td>
+                    <td>
+                        <div class="flex gap-2">
+                            <a href="{{ url_for('maquinas.editar_maquina', id=m.id) }}" class="btn btn-outline btn-sm">✏️ Editar</a>
+                            <a href="{{ url_for('maquinas.eliminar_maquina', id=m.id) }}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('¿Eliminar esta máquina y todos sus espirales?')">🗑️ Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="6" style="color:var(--muted); text-align:center; padding:32px">No hay máquinas registradas.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

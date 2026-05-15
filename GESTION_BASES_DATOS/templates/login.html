@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login · Novaventa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f; --surface: #13131a; --surface2: #1c1c28;
+            --border: #2a2a3d; --accent: #f97316; --text: #e8e8f0; --muted: #7c7c9a;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(249,115,22,.12) 0%, transparent 70%);
+            top: -200px; right: -200px;
+            pointer-events: none;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(59,130,246,.08) 0%, transparent 70%);
+            bottom: -100px; left: -100px;
+            pointer-events: none;
+        }
+        .login-box {
+            width: 100%; max-width: 400px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            position: relative;
+            z-index: 1;
+        }
+        .brand {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 28px;
+            color: var(--accent);
+            letter-spacing: -1px;
+            margin-bottom: 6px;
+        }
+        .sub { font-size: 14px; color: var(--muted); margin-bottom: 36px; }
+        .form-group { margin-bottom: 18px; }
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .8px;
+            margin-bottom: 7px;
+        }
+        input {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 11px 14px;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: border-color .15s;
+        }
+        input:focus { border-color: var(--accent); }
+        .btn {
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background .15s;
+            letter-spacing: .3px;
+        }
+        .btn:hover { background: #fb923c; }
+        .alert {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 18px;
+            background: rgba(239,68,68,.12);
+            border: 1px solid rgba(239,68,68,.3);
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <div class="brand">NOVAVENTA</div>
+        <div class="sub">Sistema de gestión de máquinas dispensadoras</div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="alert">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST">
+            <div class="form-group">
+                <label>Correo electrónico</label>
+                <input type="email" name="correo" required placeholder="tu@correo.com" autofocus>
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" name="password" required placeholder="••••••••">
+            </div>
+            <button type="submit" class="btn">Ingresar →</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Registrar Venta · Novaventa{% endblock %}
+{% block page_title %}Registrar Venta{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:500px">
+    <div class="card-title">Nueva Venta</div>
+    <form method="POST">
+        <div class="form-group">
+            <label>Espiral (posición)</label>
+            <select name="espiral_id" required id="espiral-select" onchange="actualizarInfo()">
+                <option value="">— Seleccionar espiral —</option>
+                {% for e in espirales %}
+                    {% if e.snack and e.stock_actual > 0 %}
+                    <option value="{{ e.id }}"
+                        data-snack="{{ e.snack.nombre }}"
+                        data-precio="{{ e.snack.precio }}"
+                        data-stock="{{ e.stock_actual }}"
+                        data-maquina="{{ e.maquina.nombre }}">
+                        {{ e.codigo }} — {{ e.snack.nombre }} (Stock: {{ e.stock_actual }}) · {{ e.maquina.nombre }}
+                    </option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+
+        <div id="info-espiral" style="display:none; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:14px; margin-bottom:18px; font-size:13px;">
+            <div style="color:var(--muted); margin-bottom:6px">Información del espiral seleccionado</div>
+            <div>🏧 Máquina: <strong id="info-maquina">—</strong></div>
+            <div>🍫 Snack: <strong id="info-snack">—</strong></div>
+            <div>💲 Precio unitario: <strong id="info-precio">—</strong></div>
+            <div>📦 Stock disponible: <strong id="info-stock">—</strong></div>
+            <div style="margin-top:10px; padding-top:10px; border-top:1px solid var(--border)">
+                Total estimado: <span id="info-total" style="font-family:'Syne',sans-serif; font-size:18px; font-weight:700; color:var(--accent)">$0.00</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Cantidad</label>
+            <input type="number" name="cantidad" id="cantidad" required min="1" placeholder="1" oninput="actualizarTotal()">
+        </div>
+
+        <div class="flex gap-2">
+            <button type="submit" class="btn btn-primary">Registrar Venta</button>
+            <a href="{{ url_for('ventas.listar_ventas') }}" class="btn btn-outline">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<script>
+function actualizarInfo() {
+    const sel = document.getElementById('espiral-select');
+    const opt = sel.options[sel.selectedIndex];
+    const info = document.getElementById('info-espiral');
+    if (!opt.value) { info.style.display = 'none'; return; }
+    info.style.display = 'block';
+    document.getElementById('info-maquina').textContent = opt.dataset.maquina;
+    document.getElementById('info-snack').textContent = opt.dataset.snack;
+    document.getElementById('info-precio').textContent = '$ ' + parseFloat(opt.dataset.precio).toFixed(2);
+    document.getElementById('info-stock').textContent = opt.dataset.stock + ' uds';
+    actualizarTotal();
+}
+function actualizarTotal() {
+    const sel = document.getElementById('espiral-select');
+    const opt = sel.options[sel.selectedIndex];
+    const cant = parseInt(document.getElementById('cantidad').value) || 0;
+    const precio = parseFloat(opt.dataset?.precio) || 0;
+    document.getElementById('info-total').textContent = '$ ' + (cant * precio).toFixed(2);
+}
+</script>
+{% endblock %}

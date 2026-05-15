@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Nuevo Espiral · Novaventa{% endblock %}
+{% block page_title %}Nuevo Espiral{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:500px">
+    <div class="card-title">Configurar Espiral</div>
+    <form method="POST">
+        <div class="form-group">
+            <label>Código de posición</label>
+            <input type="text" name="codigo" required placeholder="Ej: A1, B3, C2" maxlength="10">
+        </div>
+        <div class="form-group">
+            <label>Máquina</label>
+            <select name="maquina_id" required>
+                <option value="">— Seleccionar máquina —</option>
+                {% for m in maquinas %}
+                <option value="{{ m.id }}">{{ m.nombre }} ({{ m.ubicacion }})</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Snack asignado</label>
+            <select name="snack_id">
+                <option value="">— Sin asignar —</option>
+                {% for s in snacks %}
+                <option value="{{ s.id }}">{{ s.nombre }} — ${{ "%.2f"|format(s.precio) }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Capacidad máxima</label>
+                <input type="number" name="capacidad" required min="1" max="50" placeholder="10">
+            </div>
+            <div class="form-group">
+                <label>Stock actual</label>
+                <input type="number" name="stock_actual" required min="0" placeholder="0">
+            </div>
+        </div>
+        <div class="flex gap-2">
+            <button type="submit" class="btn btn-primary">Guardar Espiral</button>
+            <a href="{{ url_for('espirales.listar_espirales') }}" class="btn btn-outline">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
