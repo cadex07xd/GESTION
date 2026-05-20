@@ -3,6 +3,12 @@ from flask_login import login_required
 
 from extensions import db
 from models.maquina import Maquina
+from flask_login import current_user
+
+# Al inicio de crear_maquina, editar_maquina y eliminar_maquina:
+if current_user.rol not in ['ADMIN', 'OPERARIO']:
+    flash('No tienes permiso para realizar esta acción', 'danger')
+    return redirect(url_for('home'))
 
 maquinas = Blueprint('maquinas', __name__)
 
