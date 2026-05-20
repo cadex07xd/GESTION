@@ -7,19 +7,17 @@ from models.snack import Snack
 
 espirales = Blueprint('espirales', __name__)
 
-# LISTAR
 @espirales.route('/espirales')
 @login_required
 def listar_espirales():
     lista_espirales = Espiral.query.all()
     return render_template('espirales/listar.html', espirales=lista_espirales)
 
-# CREAR
 @espirales.route('/espirales/crear', methods=['GET', 'POST'])
 @login_required
 def crear_espiral():
     if current_user.rol not in ['ADMIN', 'OPERARIO']:
-        flash('No tienes permiso para realizar esta acción', 'danger')
+        flash('No tienes permiso', 'danger')
         return redirect(url_for('home'))
     maquinas = Maquina.query.all()
     snacks = Snack.query.all()
@@ -37,12 +35,11 @@ def crear_espiral():
         return redirect(url_for('espirales.listar_espirales'))
     return render_template('espirales/crear.html', maquinas=maquinas, snacks=snacks)
 
-# ELIMINAR
 @espirales.route('/espirales/eliminar/<int:id>')
 @login_required
 def eliminar_espiral(id):
     if current_user.rol not in ['ADMIN', 'OPERARIO']:
-        flash('No tienes permiso para realizar esta acción', 'danger')
+        flash('No tienes permiso', 'danger')
         return redirect(url_for('home'))
     espiral = Espiral.query.get_or_404(id)
     db.session.delete(espiral)
