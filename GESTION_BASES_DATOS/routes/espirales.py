@@ -5,6 +5,9 @@ from extensions import db
 from models.espiral import Espiral
 from models.maquina import Maquina
 from models.snack import Snack
+if current_user.rol not in ['ADMIN', 'OPERARIO']:
+    flash('No tienes permiso para realizar esta acción', 'danger')
+    return redirect(url_for('home'))
 
 espirales = Blueprint('espirales', __name__)
 
