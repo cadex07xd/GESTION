@@ -3,6 +3,12 @@ from flask_login import login_required
 
 from extensions import db
 from models.snack import Snack
+from flask_login import current_user
+
+# Al inicio de crear_snack, editar_snack y eliminar_snack:
+if current_user.rol != 'ADMIN':
+    flash('No tienes permiso para realizar esta acción', 'danger')
+    return redirect(url_for('home'))
 
 snacks = Blueprint('snacks', __name__)
 
